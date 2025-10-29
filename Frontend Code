@@ -1,0 +1,26 @@
+#GUI for project
+import tkinter as tk
+from tkinter import filedialog, messagebox
+from Automated_File_Organizer import organize_files
+
+def choose_folder():
+    folder_path = filedialog.askdirectory()
+    if folder_path:
+        try:
+            organize_files(folder_path)
+            messagebox.showinfo("Success", "Files organized successfully")
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
+
+root = tk.Tk()
+root.title("Automated File Organizer")
+root.geometry("300x600")
+
+label = tk.Label(root, text="Select a folder to organize your files", font=("Arial", 12))
+label.pack(pady=20)
+
+button = tk.Button(root, text="Choose Folder", command=choose_folder, bg="blue", fg="grey", width=20)
+button.pack(pady=15)
+
+root.mainloop()
+
