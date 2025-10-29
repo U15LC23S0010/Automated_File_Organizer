@@ -1,0 +1,40 @@
+import os
+import shutil
+from pathlib import Path
+
+# Define your base folder (e.g., Downloads)
+SOURCE_DIR = Path(r"E:\MOVIES")
+print("Checking path:",SOURCE_DIR)
+print("Exists:",SOURCE_DIR.exists())
+
+# Define organization rules
+FILE_CATEGORIES = {
+    "Images": [".jpg", ".jpeg", ".png", ".gif"],
+    "Documents": [".pdf", ".docx", ".txt", ".pptx"],
+    "Audio": [".mp3", ".wav"],
+    "Videos": [".mp4", ".mov", ".avi"],
+    "Archives": [".zip", ".rar", ".7z"],
+}
+def organize_files(folder_path):
+    for file_path in SOURCE_DIR.iterdir():
+        if file_path.is_file():
+            moved = False
+            for category, extensions in FILE_CATEGORIES.items():
+                if file_path.suffix.lower() in extensions:
+                    dest_folder = SOURCE_DIR / category
+                    dest_folder.mkdir(exist_ok=True)
+                    print(f"Moving  {file_path.name} to {dest_folder}")
+                    shutil.move(str(file_path), dest_folder / file_path.name)
+                    print(f"Moved: {file_path.name} → {category}/")
+                    moved = True
+                    break
+            
+            if not moved:
+                other_folder = SOURCE_DIR / "Others"
+                other_folder.mkdir(exist_ok=True)
+                shutil.move(str(file_path), other_folder / file_path.name)
+                print(f"Moved: {file_path.name} → Others/")
+
+if __name__ == "__main__":
+    organize_files()
+    print("Files have been organized successfully")
